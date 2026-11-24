@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Unofficial AutoZone-inspired auto-parts checkout security demonstration.">
+  <title>AutoZone-Inspired Auto Parts | Secure Checkout Lab</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="disclaimer">UNOFFICIAL ACADEMIC SIMULATION · NOT AFFILIATED WITH AUTOZONE · NO REAL PAYMENTS</div>
+  <header class="topbar">
+    <div class="top-inner">
+      <div class="icon-mark" aria-hidden="true">↗</div>
+      <div class="brand"><strong>AUTO PARTS / SECURITY LAB</strong><small>AutoZone-inspired pickup checkout</small></div>
+      <span class="header-tag">LOCAL TEST ENVIRONMENT</span>
+    </div>
+  </header>
+  <main>
+    <section class="intro">
+      <div class="intro-copy">
+        <p class="eyebrow">PARTS COUNTER · SECURE WEB DESIGN · STUDENT PROJECT</p>
+        <h1>Every order matters.<br><em>Every input gets checked.</em></h1>
+        <p class="lead">This AutoZone-inspired learning example lets you check a fictional auto-parts order and create a simulated pickup receipt. Use the test buttons to demonstrate how SQL injection and cross-site scripting are prevented.</p>
+        <div class="pills"><span>Prepared SQL</span><span>Text-only receipt</span><span>Content Security Policy</span></div>
+      </div>
+      <aside class="demo-ticket" aria-label="Sample parts order">
+        <div class="ticket-top">SAMPLE PICKUP ORDER</div>
+        <div class="ticket-id">AZL-4418</div>
+        <div class="ticket-line"></div>
+        <p>All-Season Wiper Blade Pair</p>
+        <div class="ticket-cost">$32.99 <small>demo price</small></div>
+        <div class="ticket-foot">SIMULATION ONLY · NO CHARGE</div>
+      </aside>
+    </section>
+
+    <div class="section-caption">TWO TESTS · ONE SECURE CHECKOUT</div>
+    <section class="lab-grid" aria-label="Security demonstration controls">
+      <article class="panel" aria-labelledby="sql-title">
+        <div class="panel-heading"><span class="step">01</span><div><h2 id="sql-title">Find an auto-parts order</h2><p>SQL injection protection · 50 points</p></div></div>
+        <p class="help">The order code reaches a SQLite database. Prepared statements keep the user's input separate from the SQL command.</p>
+        <label for="lookup-code">Pickup order code</label>
+        <input id="lookup-code" value="AZL-4418" autocomplete="off" spellcheck="false">
+        <div class="buttons"><button id="lookup-button" type="button">Find order</button><button id="sql-sample-button" class="secondary" type="button">Insert SQL injection sample</button></div>
+        <div class="outcome" aria-live="polite"><div class="outcome-title">Database response</div><p id="lookup-result">Use AZL-4418 for a normal lookup, then test the injection input.</p></div>
+        <div class="hint">Expected: the valid code returns the wiper blade order; an injection attempt returns <b>No matching parts order</b>.</div>
+      </article>
+
+      <article class="panel" aria-labelledby="xss-title">
+        <div class="panel-heading"><span class="step">02</span><div><h2 id="xss-title">Generate a pickup receipt</h2><p>Cross-site scripting protection · 30 points</p></div></div>
+        <p class="help">The pickup note is untrusted. The receipt displays its characters as text without creating executable HTML elements.</p>
+        <form id="checkout-form">
+          <label for="checkout-code">Pickup order code</label>
+          <input id="checkout-code" value="AZL-4418" required>
+          <label for="buyer-name">Customer display name (sample only)</label>
+          <input id="buyer-name" value="Sample Driver" maxlength="60" required>
+          <label for="pickup-note">Pickup instructions</label>
+          <textarea id="pickup-note" rows="3" maxlength="240">Please keep the parts order at the pickup counter.</textarea>
+          <div class="buttons"><button type="submit">Create demo receipt</button><button id="xss-sample-button" class="secondary" type="button">Insert XSS sample</button></div>
+        </form>
+        <div class="outcome" aria-live="polite"><div class="outcome-title">Receipt / safe output</div><div id="receipt-result"><p>No receipt yet.</p></div></div>
+        <p class="status">Script test status: <strong id="script-status">No injected script executed</strong></p>
+      </article>
+    </section>
+    <section class="learning">
+      <div><p class="eyebrow">SECURITY DESIGN</p><h2>Three controls, one clear purpose.</h2></div>
+      <div class="learning-items"><div><b>1 / Bind query values</b><p>Use <code>WHERE order_code = ?</code> rather than building SQL with user text.</p></div><div><b>2 / Do not render input as HTML</b><p>The receipt inserts untrusted data through <code>textContent</code>, not <code>innerHTML</code>.</p></div><div><b>3 / Restrict script execution</b><p>The browser receives a restrictive CSP as an additional protective layer.</p></div></div>
+    </section>
+    <footer>Independent educational AutoZone-inspired scenario. Product names, order IDs, fitments, and prices are fictional examples; no card information is collected or processed.</footer>
+  </main>
+</body>
+</html>
